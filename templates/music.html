@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Plotly Example</title>
+    <!-- Include Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <!-- Ajoutez un formulaire avec une liste déroulante -->
+    <form method="post" action="{{ url_for('music') }}">
+        <label for="year">Sélectionnez une année :</label>
+        <select name="year" id="year">
+            <option value="all">Toutes les années</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+        </select>
+        <button type="submit">Appliquer</button>
+    </form>
+
+    <!-- Itérer sur la liste pour afficher les informations pour chaque vidéo -->
+    <div style="display: flex; justify-content: space-around;">
+        {% for video_info in video_info_list %}
+            <div style="text-align: center; position: relative;">
+                <a href="https://www.youtube.com/watch?v={{ video_info['video_id'] }}" target="_blank">
+                    <div style="position: relative; display: inline-block;">
+                        <!-- Image de la vidéo -->
+                        <img src="{{ video_info['thumbnail_url'] }}" alt="Thumbnail" style="width: 300px; height: 200px;">
+                        <!-- Logo de YouTube en position absolue -->
+                        <img src="{{ url_for('static', filename='youtube-logo-png-46031.png') }}" alt="YouTube Logo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px;">
+                    </div>
+                </a>
+                <h2>{{ video_info['title'] }}</h2>
+                <p>Chaîne : {{ video_info['channel_title'] }}</p>
+                <p>{{ video_info['view_count'] }} vues</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Render Plotly figure here -->
+    {{ plot_html|safe }}
+</body>
+{% endblock %}
+
