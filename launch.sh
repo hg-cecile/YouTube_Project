@@ -11,4 +11,4 @@ bash /app/integrator/working_y_n.sh
 bash /app/processor/process.sh
 
 # Transform and build app
-python3 app_yt.py
+python3 app.py

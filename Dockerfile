@@ -1,7 +1,11 @@
 FROM ubuntu:latest
 LABEL maintainer="Yoan"
 
-RUN apt update && apt-get install -y zip && apt-get install -y vim && apt-get install -y python3 && apt-get install -y python3-pip
+RUN apt update && \
+    apt-get install -y zip && \
+    apt-get install -y vim && \
+    apt-get install -y python3 && \
+    apt-get install -y python3-pip
 
 WORKDIR /app
 COPY . /app
