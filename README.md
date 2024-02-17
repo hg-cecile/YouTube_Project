@@ -92,7 +92,7 @@ Les dossier static/ et templates/ comportent les fichiers nécessaires pour cons
 
 ## Contact
 
-- [Cécile Huang](https://github.com/hg-cecile) - cecilehuang0@gmail.com
+- [Cécile Huang](https://github.com/hg-cecile) - cecilehg@yahoo.com
 - [Yoan Jsem](https://github.com/Naoyy) - yoan.jsem@gmail.com
 - [Alice Liu](https://github.com/alice-l1) - alice.liu015@gmail.com
 <a name="contact"></a>
