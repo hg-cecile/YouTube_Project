@@ -127,28 +127,21 @@ def music():
     liste_date = list(df['trending_date'].dt.strftime('%Y-%m').unique())
     df_music = df[df["categoryType"] == "Music"].sort_values(by="view_count", ascending=False)
     df_music = df_music.drop_duplicates(subset=["channelId"], keep="first")
-    annee2 = None
-    mois2 = None
     if request.method == 'POST':
         selected_year = request.form.get('year')
         print(f"selected_year : {selected_year}")
-        
         if selected_year == None :
             selected_year = 'all'
-
         if selected_year == 'all':
             df_filtered = df_music
         else:
             selected_year = int(selected_year)
             df_filtered = df_music[df_music['publishedYear'] == selected_year]
     else:
-        # Traitement lorsque le formulaire n'est pas soumis
         df_filtered = df_music
 
-    # Initialiser une liste pour stocker les informations de chaque ligne
     video_info_list = []
 
-    # Itérer sur les trois premières lignes du DataFrame filtré
     for index, row in df_filtered.head(3).iterrows():
         title = row['title']
         thumbnail_url = row['thumbnail_link']
@@ -156,7 +149,6 @@ def music():
         channel_title = row['channelTitle']
         view_count = row['view_count']
 
-        # Ajouter les informations à la liste
         video_info_list.append({
             'title': title,
             'thumbnail_url': thumbnail_url,
@@ -165,18 +157,15 @@ def music():
             'view_count': view_count,
         })
 
-    # Initialize figure
     fig = go.Figure()
     fig.add_trace(
-        go.Bar(x=df_groupby["publishedYear"],
-                y=df_groupby[df_groupby["categoryType"] == "Music"]["view_count"],
-                name="Nombre de vues",
-                ))
+        go.Bar(x=df_groupby["publishedYear"], 
+               y=df_groupby[df_groupby["categoryType"] == "Music"]["view_count"],
+                name="Nombre de vues"))
     fig.add_trace(
         go.Bar(x=df_groupby["publishedYear"],
                 y=df_groupby[df_groupby["categoryType"] == "Music"]["comment_count"],
-                name="Nombre de commentaires",
-                ))
+                name="Nombre de commentaires"))
     fig.add_trace(
         go.Bar(x=df_groupby["publishedYear"],
                 y=df_groupby[df_groupby["categoryType"] == "Music"]["video_count"],
@@ -211,49 +200,40 @@ def music():
             )
         ])
     fig.update_layout(title_text="STATISTIQUES")
-    # plt.title("STATISTIQUES")
     plot_html = pio.to_html(fig, full_html=False)
 
     tableau_data = trend_youtuber_by_month("2020-08", "Music")
 
-    # Appeler la fonction top pour obtenir les données du tableau
-    # tableau_data = trend_of_the_day("Music").head(20)
-    # mois2 = None
-    # annee2 = None
     if request.method == 'POST':
-        # annee2 = request.form.get('year2')
-        # mois2 = request.form.get('month2')
-        # print(f"annee2 :{annee2}, type : {type(annee2)}")
-        # print(f"mois2 :{mois2}, type : {type(mois2)}")
         date_ = request.form.get('date')
-
         tableau_data = trend_youtuber_by_month(date_, "Music")
 
-    return render_template("music.html", plot_html=plot_html, video_info_list=video_info_list, tableau_data=tableau_data, liste_date=liste_date)
-
+    return render_template("music.html", 
+                           plot_html=plot_html, 
+                           video_info_list=video_info_list, 
+                           tableau_data=tableau_data,
+                           liste_date=liste_date)
 
 
 @app.route("/sports", methods=['GET', 'POST'])
 def sports():
-    df_sport = df[df["categoryType"] == "Sports"].sort_values(by="view_count", ascending=False)
-    df_sport = df_sport.drop_duplicates(subset=["channelId"], keep="first")
-    
+    liste_date = list(df['trending_date'].dt.strftime('%Y-%m').unique())
+    df_temp = df[df["categoryType"] == "Sports"].sort_values(by="view_count", ascending=False)
+    df_temp = df_temp.drop_duplicates(subset=["channelId"], keep="first")
     if request.method == 'POST':
         selected_year = request.form.get('year')
-
+        print(f"selected_year : {selected_year}")
+        if selected_year == None :
+            selected_year = 'all'
         if selected_year == 'all':
-            df_filtered = df_sport
+            df_filtered = df_temp
         else:
             selected_year = int(selected_year)
-            df_filtered = df_sport[df_sport['publishedYear'] == selected_year]
+            df_filtered = df_temp[df_temp['publishedYear'] == selected_year]
     else:
-        # Traitement lorsque le formulaire n'est pas soumis
-        df_filtered = df_sport
+        df_filtered = df_temp
 
-    # Initialiser une liste pour stocker les informations de chaque ligne
     video_info_list = []
-
-    # Itérer sur les trois premières lignes du DataFrame filtré
     for index, row in df_filtered.head(3).iterrows():
         title = row['title']
         thumbnail_url = row['thumbnail_link']
@@ -261,38 +241,28 @@ def sports():
         channel_title = row['channelTitle']
         view_count = row['view_count']
 
-        # Ajouter les informations à la liste
         video_info_list.append({
             'title': title,
             'thumbnail_url': thumbnail_url,
             'video_id': video_id,
             'channel_title': channel_title,
-            'view_count': view_count
+            'view_count': view_count,
         })
 
-    # Initialize figure
     fig = go.Figure()
-
-    # Add Traces
-
     fig.add_trace(
-        go.Bar(x=df_groupby["publishedYear"],
-                y=df_groupby[df_groupby["categoryType"] == "Sports"]["view_count"],
-                name="Nombre de vues",
-                ))
-
+        go.Bar(x=df_groupby["publishedYear"], 
+               y=df_groupby[df_groupby["categoryType"] == "Sports"]["view_count"],
+                name="Nombre de vues"))
     fig.add_trace(
         go.Bar(x=df_groupby["publishedYear"],
                 y=df_groupby[df_groupby["categoryType"] == "Sports"]["comment_count"],
-                name="Nombre de commentaires",
-                ))
-
+                name="Nombre de commentaires"))
     fig.add_trace(
         go.Bar(x=df_groupby["publishedYear"],
                 y=df_groupby[df_groupby["categoryType"] == "Sports"]["video_count"],
                 name="Nombre de vidéos",
                 ))
-
     fig.update_layout(
         updatemenus=[
             dict(
@@ -321,38 +291,42 @@ def sports():
                 ]),
             )
         ])
-
-    # Set title
-    fig.update_layout(title_text="Titre à changer")
-
-    # Utiliser plotly.io.to_html pour convertir la figure en HTML
+    fig.update_layout(title_text="STATISTIQUES")
     plot_html = pio.to_html(fig, full_html=False)
 
-    return render_template("sports.html", plot_html=plot_html, video_info_list=video_info_list)
+    tableau_data = trend_youtuber_by_month("2020-08", "Sports")
+
+    if request.method == 'POST':
+        date_ = request.form.get('date')
+        tableau_data = trend_youtuber_by_month(date_, "Sports")
+
+    return render_template("sports.html", 
+                           plot_html=plot_html, 
+                           video_info_list=video_info_list, 
+                           tableau_data=tableau_data,
+                           liste_date=liste_date)
 
 
 
 @app.route("/entertainment", methods=['GET', 'POST'])
 def entertainment():
-    df_entertainment = df[df["categoryType"] == "Entertainment"].sort_values(by="view_count", ascending=False)
-    df_entertainment = df_entertainment.drop_duplicates(subset=["channelId"], keep="first")
-    
+    liste_date = list(df['trending_date'].dt.strftime('%Y-%m').unique())
+    df_temp = df[df["categoryType"] == "Entertainment"].sort_values(by="view_count", ascending=False)
+    df_temp = df_temp.drop_duplicates(subset=["channelId"], keep="first")
     if request.method == 'POST':
         selected_year = request.form.get('year')
-
+        print(f"selected_year : {selected_year}")
+        if selected_year == None :
+            selected_year = 'all'
         if selected_year == 'all':
-            df_filtered = df_entertainment
+            df_filtered = df_temp
         else:
             selected_year = int(selected_year)
-            df_filtered = df_entertainment[df_entertainment['publishedYear'] == selected_year]
+            df_filtered = df_temp[df_temp['publishedYear'] == selected_year]
     else:
-        # Traitement lorsque le formulaire n'est pas soumis
-        df_filtered = df_entertainment
+        df_filtered = df_temp
 
-    # Initialiser une liste pour stocker les informations de chaque ligne
     video_info_list = []
-
-    # Itérer sur les trois premières lignes du DataFrame filtré
     for index, row in df_filtered.head(3).iterrows():
         title = row['title']
         thumbnail_url = row['thumbnail_link']
@@ -360,38 +334,28 @@ def entertainment():
         channel_title = row['channelTitle']
         view_count = row['view_count']
 
-        # Ajouter les informations à la liste
         video_info_list.append({
             'title': title,
             'thumbnail_url': thumbnail_url,
             'video_id': video_id,
             'channel_title': channel_title,
-            'view_count': view_count
+            'view_count': view_count,
         })
 
-    # Initialize figure
     fig = go.Figure()
-
-    # Add Traces
-
     fig.add_trace(
-        go.Bar(x=df_groupby["publishedYear"],
-                y=df_groupby[df_groupby["categoryType"] == "Entertainment"]["view_count"],
-                name="Nombre de vues",
-                ))
-
+        go.Bar(x=df_groupby["publishedYear"], 
+               y=df_groupby[df_groupby["categoryType"] == "Entertainment"]["view_count"],
+                name="Nombre de vues"))
     fig.add_trace(
         go.Bar(x=df_groupby["publishedYear"],
                 y=df_groupby[df_groupby["categoryType"] == "Entertainment"]["comment_count"],
-                name="Nombre de commentaires",
-                ))
-
+                name="Nombre de commentaires"))
     fig.add_trace(
         go.Bar(x=df_groupby["publishedYear"],
                 y=df_groupby[df_groupby["categoryType"] == "Entertainment"]["video_count"],
                 name="Nombre de vidéos",
                 ))
-
     fig.update_layout(
         updatemenus=[
             dict(
@@ -420,73 +384,477 @@ def entertainment():
                 ]),
             )
         ])
-
-    # Set title
-    fig.update_layout(title_text="Titre à changer")
-
-    # Utiliser plotly.io.to_html pour convertir la figure en HTML
+    fig.update_layout(title_text="STATISTIQUES")
     plot_html = pio.to_html(fig, full_html=False)
 
-    return render_template("entertainment.html", plot_html=plot_html, video_info_list=video_info_list)
+    tableau_data = trend_youtuber_by_month("2020-08", "Entertainment")
 
-@app.route("/comedy")
+    if request.method == 'POST':
+        date_ = request.form.get('date')
+        tableau_data = trend_youtuber_by_month(date_, "Entertainment")
+
+    return render_template("entertainment.html", 
+                           plot_html=plot_html, 
+                           video_info_list=video_info_list, 
+                           tableau_data=tableau_data,
+                           liste_date=liste_date)
+
+@app.route("/comedy", methods=['GET', 'POST'])
 def comedy():
-    return render_template("comedy.html")
+    liste_date = list(df['trending_date'].dt.strftime('%Y-%m').unique())
+    df_temp = df[df["categoryType"] == "Comedy"].sort_values(by="view_count", ascending=False)
+    df_temp = df_temp.drop_duplicates(subset=["channelId"], keep="first")
+    if request.method == 'POST':
+        selected_year = request.form.get('year')
+        print(f"selected_year : {selected_year}")
+        if selected_year == None :
+            selected_year = 'all'
+        if selected_year == 'all':
+            df_filtered = df_temp
+        else:
+            selected_year = int(selected_year)
+            df_filtered = df_temp[df_temp['publishedYear'] == selected_year]
+    else:
+        df_filtered = df_temp
+
+    video_info_list = []
+    for index, row in df_filtered.head(3).iterrows():
+        title = row['title']
+        thumbnail_url = row['thumbnail_link']
+        video_id = row['video_id']
+        channel_title = row['channelTitle']
+        view_count = row['view_count']
+
+        video_info_list.append({
+            'title': title,
+            'thumbnail_url': thumbnail_url,
+            'video_id': video_id,
+            'channel_title': channel_title,
+            'view_count': view_count,
+        })
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"], 
+               y=df_groupby[df_groupby["categoryType"] == "Comedy"]["view_count"],
+                name="Nombre de vues"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "Comedy"]["comment_count"],
+                name="Nombre de commentaires"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "Comedy"]["video_count"],
+                name="Nombre de vidéos",
+                ))
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                active=0,
+                buttons=list([
+                    dict(label="Statistiques globales",
+                        method="update",
+                        args=[{"visible": [True, True, True]},
+                            {"title": "Statistiques globales",
+                                "annotations": []}]),
+                    dict(label="Nombre de vues",
+                        method="update",
+                        args=[{"visible": [True, False, False]},
+                            {"title": "Nombre de vues",
+                                "annotations": []}]),
+                    dict(label="Nombre de commentaires",
+                        method="update",
+                        args=[{"visible": [False, True, False]},
+                            {"title": "Nombre de commentaires",
+                                "annotations": []}]),
+                    dict(label="Nombre de vidéos",
+                        method="update",
+                        args=[{"visible": [False, False, True]},
+                            {"title": "Nombre de vidéos",
+                                "annotations": []}])
+                ]),
+            )
+        ])
+    fig.update_layout(title_text="STATISTIQUES")
+    plot_html = pio.to_html(fig, full_html=False)
+
+    tableau_data = trend_youtuber_by_month("2020-08", "Comedy")
+
+    if request.method == 'POST':
+        date_ = request.form.get('date')
+        tableau_data = trend_youtuber_by_month(date_, "Comedy")
+
+    return render_template("comedy.html", 
+                           plot_html=plot_html, 
+                           video_info_list=video_info_list, 
+                           tableau_data=tableau_data,
+                           liste_date=liste_date)
 
 
-@app.route("/education")
+@app.route("/education", methods=['GET', 'POST'])
 def education():
-    return render_template("education.html")
+    liste_date = list(df['trending_date'].dt.strftime('%Y-%m').unique())
+    df_temp = df[df["categoryType"] == "Education"].sort_values(by="view_count", ascending=False)
+    df_temp = df_temp.drop_duplicates(subset=["channelId"], keep="first")
+    if request.method == 'POST':
+        selected_year = request.form.get('year')
+        print(f"selected_year : {selected_year}")
+        if selected_year == None :
+            selected_year = 'all'
+        if selected_year == 'all':
+            df_filtered = df_temp
+        else:
+            selected_year = int(selected_year)
+            df_filtered = df_temp[df_temp['publishedYear'] == selected_year]
+    else:
+        df_filtered = df_temp
 
-@app.route("/gaming")
+    video_info_list = []
+    for index, row in df_filtered.head(3).iterrows():
+        title = row['title']
+        thumbnail_url = row['thumbnail_link']
+        video_id = row['video_id']
+        channel_title = row['channelTitle']
+        view_count = row['view_count']
+
+        video_info_list.append({
+            'title': title,
+            'thumbnail_url': thumbnail_url,
+            'video_id': video_id,
+            'channel_title': channel_title,
+            'view_count': view_count,
+        })
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"], 
+               y=df_groupby[df_groupby["categoryType"] == "Education"]["view_count"],
+                name="Nombre de vues"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "Education"]["comment_count"],
+                name="Nombre de commentaires"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "Education"]["video_count"],
+                name="Nombre de vidéos",
+                ))
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                active=0,
+                buttons=list([
+                    dict(label="Statistiques globales",
+                        method="update",
+                        args=[{"visible": [True, True, True]},
+                            {"title": "Statistiques globales",
+                                "annotations": []}]),
+                    dict(label="Nombre de vues",
+                        method="update",
+                        args=[{"visible": [True, False, False]},
+                            {"title": "Nombre de vues",
+                                "annotations": []}]),
+                    dict(label="Nombre de commentaires",
+                        method="update",
+                        args=[{"visible": [False, True, False]},
+                            {"title": "Nombre de commentaires",
+                                "annotations": []}]),
+                    dict(label="Nombre de vidéos",
+                        method="update",
+                        args=[{"visible": [False, False, True]},
+                            {"title": "Nombre de vidéos",
+                                "annotations": []}])
+                ]),
+            )
+        ])
+    fig.update_layout(title_text="STATISTIQUES")
+    plot_html = pio.to_html(fig, full_html=False)
+
+    tableau_data = trend_youtuber_by_month("2020-08", "Education")
+
+    if request.method == 'POST':
+        date_ = request.form.get('date')
+        tableau_data = trend_youtuber_by_month(date_, "Education")
+
+    return render_template("education.html", 
+                           plot_html=plot_html, 
+                           video_info_list=video_info_list, 
+                           tableau_data=tableau_data,
+                           liste_date=liste_date)
+
+@app.route("/gaming", methods=['GET', 'POST'])
 def gaming():
-    return render_template("gaming.html")
+    liste_date = list(df['trending_date'].dt.strftime('%Y-%m').unique())
+    df_temp = df[df["categoryType"] == "Gaming"].sort_values(by="view_count", ascending=False)
+    df_temp = df_temp.drop_duplicates(subset=["channelId"], keep="first")
+    if request.method == 'POST':
+        selected_year = request.form.get('year')
+        print(f"selected_year : {selected_year}")
+        if selected_year == None :
+            selected_year = 'all'
+        if selected_year == 'all':
+            df_filtered = df_temp
+        else:
+            selected_year = int(selected_year)
+            df_filtered = df_temp[df_temp['publishedYear'] == selected_year]
+    else:
+        df_filtered = df_temp
 
-@app.route("/people_blog")
+    video_info_list = []
+    for index, row in df_filtered.head(3).iterrows():
+        title = row['title']
+        thumbnail_url = row['thumbnail_link']
+        video_id = row['video_id']
+        channel_title = row['channelTitle']
+        view_count = row['view_count']
+
+        video_info_list.append({
+            'title': title,
+            'thumbnail_url': thumbnail_url,
+            'video_id': video_id,
+            'channel_title': channel_title,
+            'view_count': view_count,
+        })
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"], 
+               y=df_groupby[df_groupby["categoryType"] == "Gaming"]["view_count"],
+                name="Nombre de vues"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "Gaming"]["comment_count"],
+                name="Nombre de commentaires"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "Gaming"]["video_count"],
+                name="Nombre de vidéos",
+                ))
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                active=0,
+                buttons=list([
+                    dict(label="Statistiques globales",
+                        method="update",
+                        args=[{"visible": [True, True, True]},
+                            {"title": "Statistiques globales",
+                                "annotations": []}]),
+                    dict(label="Nombre de vues",
+                        method="update",
+                        args=[{"visible": [True, False, False]},
+                            {"title": "Nombre de vues",
+                                "annotations": []}]),
+                    dict(label="Nombre de commentaires",
+                        method="update",
+                        args=[{"visible": [False, True, False]},
+                            {"title": "Nombre de commentaires",
+                                "annotations": []}]),
+                    dict(label="Nombre de vidéos",
+                        method="update",
+                        args=[{"visible": [False, False, True]},
+                            {"title": "Nombre de vidéos",
+                                "annotations": []}])
+                ]),
+            )
+        ])
+    fig.update_layout(title_text="STATISTIQUES")
+    plot_html = pio.to_html(fig, full_html=False)
+
+    tableau_data = trend_youtuber_by_month("2020-08", "Gaming")
+
+    if request.method == 'POST':
+        date_ = request.form.get('date')
+        tableau_data = trend_youtuber_by_month(date_, "Gaming")
+
+    return render_template("gaming.html", 
+                           plot_html=plot_html, 
+                           video_info_list=video_info_list, 
+                           tableau_data=tableau_data,
+                           liste_date=liste_date)
+
+@app.route("/people_blog", methods=['GET', 'POST'])
 def people_blog():
-    return render_template("people_blog.html")
+    liste_date = list(df['trending_date'].dt.strftime('%Y-%m').unique())
+    df_temp = df[df["categoryType"] == "People & Blogs"].sort_values(by="view_count", ascending=False)
+    df_temp = df_temp.drop_duplicates(subset=["channelId"], keep="first")
+    if request.method == 'POST':
+        selected_year = request.form.get('year')
+        print(f"selected_year : {selected_year}")
+        if selected_year == None :
+            selected_year = 'all'
+        if selected_year == 'all':
+            df_filtered = df_temp
+        else:
+            selected_year = int(selected_year)
+            df_filtered = df_temp[df_temp['publishedYear'] == selected_year]
+    else:
+        df_filtered = df_temp
 
-@app.route("/travel")
+    video_info_list = []
+    for index, row in df_filtered.head(3).iterrows():
+        title = row['title']
+        thumbnail_url = row['thumbnail_link']
+        video_id = row['video_id']
+        channel_title = row['channelTitle']
+        view_count = row['view_count']
+
+        video_info_list.append({
+            'title': title,
+            'thumbnail_url': thumbnail_url,
+            'video_id': video_id,
+            'channel_title': channel_title,
+            'view_count': view_count,
+        })
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"], 
+               y=df_groupby[df_groupby["categoryType"] == "People & Blogs"]["view_count"],
+                name="Nombre de vues"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "People & Blogs"]["comment_count"],
+                name="Nombre de commentaires"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "People & Blogs"]["video_count"],
+                name="Nombre de vidéos",
+                ))
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                active=0,
+                buttons=list([
+                    dict(label="Statistiques globales",
+                        method="update",
+                        args=[{"visible": [True, True, True]},
+                            {"title": "Statistiques globales",
+                                "annotations": []}]),
+                    dict(label="Nombre de vues",
+                        method="update",
+                        args=[{"visible": [True, False, False]},
+                            {"title": "Nombre de vues",
+                                "annotations": []}]),
+                    dict(label="Nombre de commentaires",
+                        method="update",
+                        args=[{"visible": [False, True, False]},
+                            {"title": "Nombre de commentaires",
+                                "annotations": []}]),
+                    dict(label="Nombre de vidéos",
+                        method="update",
+                        args=[{"visible": [False, False, True]},
+                            {"title": "Nombre de vidéos",
+                                "annotations": []}])
+                ]),
+            )
+        ])
+    fig.update_layout(title_text="STATISTIQUES")
+    plot_html = pio.to_html(fig, full_html=False)
+
+    tableau_data = trend_youtuber_by_month("2020-08", "People & Blogs")
+
+    if request.method == 'POST':
+        date_ = request.form.get('date')
+        tableau_data = trend_youtuber_by_month(date_, "People & Blogs")
+
+    return render_template("people_blog.html", 
+                           plot_html=plot_html, 
+                           video_info_list=video_info_list, 
+                           tableau_data=tableau_data,
+                           liste_date=liste_date)
+
+@app.route("/travel", methods=['GET', 'POST'])
 def travel():
-    return render_template("travel.html")
+    liste_date = list(df['trending_date'].dt.strftime('%Y-%m').unique())
+    df_temp = df[df["categoryType"] == "Travel & Events"].sort_values(by="view_count", ascending=False)
+    df_temp = df_temp.drop_duplicates(subset=["channelId"], keep="first")
+    if request.method == 'POST':
+        selected_year = request.form.get('year')
+        print(f"selected_year : {selected_year}")
+        if selected_year == None :
+            selected_year = 'all'
+        if selected_year == 'all':
+            df_filtered = df_temp
+        else:
+            selected_year = int(selected_year)
+            df_filtered = df_temp[df_temp['publishedYear'] == selected_year]
+    else:
+        df_filtered = df_temp
 
-########## 
+    video_info_list = []
+    for index, row in df_filtered.head(3).iterrows():
+        title = row['title']
+        thumbnail_url = row['thumbnail_link']
+        video_id = row['video_id']
+        channel_title = row['channelTitle']
+        view_count = row['view_count']
 
+        video_info_list.append({
+            'title': title,
+            'thumbnail_url': thumbnail_url,
+            'video_id': video_id,
+            'channel_title': channel_title,
+            'view_count': view_count,
+        })
 
-# @app.route("/search", methods=['POST','GET'])
-# def search():
-#     if request.method == 'POST':
-#         search_query = request.form.get('search_query')
-#         df_results = moteur_recherche(search_query, df_lastest)
-#         print("seach_query :", search_query)
-#         print("df_results : ", df_results)
-#          # Initialiser une liste pour stocker les informations de chaque ligne
-#         video_info_list = []
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"], 
+               y=df_groupby[df_groupby["categoryType"] == "Travel & Events"]["view_count"],
+                name="Nombre de vues"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "Travel & Events"]["comment_count"],
+                name="Nombre de commentaires"))
+    fig.add_trace(
+        go.Bar(x=df_groupby["publishedYear"],
+                y=df_groupby[df_groupby["categoryType"] == "Travel & Events"]["video_count"],
+                name="Nombre de vidéos",
+                ))
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                active=0,
+                buttons=list([
+                    dict(label="Statistiques globales",
+                        method="update",
+                        args=[{"visible": [True, True, True]},
+                            {"title": "Statistiques globales",
+                                "annotations": []}]),
+                    dict(label="Nombre de vues",
+                        method="update",
+                        args=[{"visible": [True, False, False]},
+                            {"title": "Nombre de vues",
+                                "annotations": []}]),
+                    dict(label="Nombre de commentaires",
+                        method="update",
+                        args=[{"visible": [False, True, False]},
+                            {"title": "Nombre de commentaires",
+                                "annotations": []}]),
+                    dict(label="Nombre de vidéos",
+                        method="update",
+                        args=[{"visible": [False, False, True]},
+                            {"title": "Nombre de vidéos",
+                                "annotations": []}])
+                ]),
+            )
+        ])
+    fig.update_layout(title_text="STATISTIQUES")
+    plot_html = pio.to_html(fig, full_html=False)
 
-#         # Itérer sur les trois premières lignes du DataFrame filtré
-#         for index, row in df_results.iterrows():
-#             title = row['title']
-#             thumbnail_url = row['thumbnail_link']
-#             video_id = row['video_id']
-#             channel_title = row['channelTitle']
-#             view_count = row['view_count']
+    tableau_data = trend_youtuber_by_month("2020-08", "Travel & Events")
 
-#             # Ajouter les informations à la liste
-#             video_info_list.append({
-#                 'title': title,
-#                 'thumbnail_url': thumbnail_url,
-#                 'video_id': video_id,
-#                 'channel_title': channel_title,
-#                 'view_count': view_count
-#                     })
-#         print("video_info_list", video_info_list)
+    if request.method == 'POST':
+        date_ = request.form.get('date')
+        tableau_data = trend_youtuber_by_month(date_, "Travel & Events")
 
-#         return render_template("search_results.html", df_results=df_results, video_info_list=video_info_list)
-#     else:
-#         return redirect(url_for('home_page'))
-        # return render_template("base.html")
-    
-######################################
+    return render_template("travel.html", 
+                           plot_html=plot_html, 
+                           video_info_list=video_info_list, 
+                           tableau_data=tableau_data,
+                           liste_date=liste_date)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

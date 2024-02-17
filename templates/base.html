@@ -7,14 +7,95 @@
     <style>
         body {
             background-image: url('static/fond_vectoriel.jpg');
-            background-size: cover; /* Pour couvrir toute la surface du corps */
-            background-repeat: no-repeat; /* Pour éviter la répétition de l'image */
-            background-attachment: fixed; /* Pour fixer l'image lors du défilement */
-            font-family: 'Roboto', sans-serif; /* Utilisez Roboto ou une autre police similaire */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Arial', sans-serif; /* Appliquez la même police utilisée pour body, h1, h2, h3, etc. */
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #d40404;
+            color: #fff;
+            padding: 5px 15px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #eb0404;
+        }
+
+        .video-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .video-card {
+            text-align: center;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .video-card img {
+            width: 300px;
+            height: 200px;
+        }
+
+        .video-card a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .video-card a:hover {
+            text-decoration: underline;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #e5e5e5;
         }
     </style>
     
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -37,15 +118,15 @@
 		</li>
 
 		<li class="nav-item">
-		    <a class="nav-link" href="{{ url_for('music') }}">Music</a>
+		    <a class="nav-link" href="{{ url_for('music') }}">Musique</a>
 		</li>
 
         <li class="nav-item">
-		    <a class="nav-link" href="{{ url_for('entertainment') }}">Entertainment</a>
+		    <a class="nav-link" href="{{ url_for('entertainment') }}">Divertissement</a>
 		</li>
 
         <li class="nav-item">
-		    <a class="nav-link" href="{{ url_for('comedy') }}">Comedy</a>
+		    <a class="nav-link" href="{{ url_for('comedy') }}">Comédie</a>
 		</li>
 
         <li class="nav-item">
@@ -57,11 +138,11 @@
 		</li>
 
         <li class="nav-item">
-		    <a class="nav-link" href="{{ url_for('people_blog') }}">People & Blog</a>
+		    <a class="nav-link" href="{{ url_for('people_blog') }}">People & Blogs</a>
 		</li>
 
         <li class="nav-item">
-		    <a class="nav-link" href="{{ url_for('travel') }}">Travel & Events</a>
+		    <a class="nav-link" href="{{ url_for('travel') }}">Voyages & Evènements</a>
 		</li>
 		
 	    </ul>
@@ -81,24 +162,25 @@
         </form>
         
     
-        <h2>Résultats de la recherche</h2>
-        <div style="display: flex; flex-wrap: wrap; justify-content: space-around; border: 1px solid #ccc;">
-            <!-- Ajoutez une bordure pour visualiser le conteneur -->
+        <h2>Vidéos en tendance selon la recherche</h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
             {% for video_info in video_info_list %}
-                <div style="width: 30%; text-align: center; position: relative; margin-bottom: 20px; border: 1px solid #ddd;">
-                    <!-- Ajoutez une bordure pour visualiser chaque élément vidéo -->
+                <div style="width: 30%; text-align: center; position: relative; margin-bottom: 20px;">
                     <a href="https://www.youtube.com/watch?v={{ video_info['video_id'] }}" target="_blank">
-                        <div style="position: relative; display: inline-block;">
-                            <img src="{{ video_info['thumbnail_url'] }}" alt="Thumbnail" style="width: 150%; height: auto;">
+                        <div style="position: relative; display: inline-block; text-align: center;">
+                            <img src="{{ video_info['thumbnail_url'] }}" alt="Thumbnail" style="width: 250px; height: 150px;">
+                            <!-- Centrez l'image du logo YouTube horizontalement et verticalement -->
                             <img src="{{ url_for('static', filename='youtube-logo-png-46031.png') }}" alt="YouTube Logo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px;">
                         </div>
                     </a>
-                    <h4>{{ video_info['title'] }}</h4>
+                    <h5>{{ video_info['title'] }}</h5>
                     <p>Chaîne : {{ video_info['channel_title'] }}</p>
                     <p>{{ video_info['view_count'] }} vues</p>
                 </div>
             {% endfor %}
         </div>
+        
+        
         
         
     </body>

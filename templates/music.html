@@ -1,126 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask Plotly Example</title>
     <!-- Include Plotly.js -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <!-- ... autres balises meta et title ... -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <!------------------------------------- CSS ------------------------------------>
-
-    <style>
-
-
-    
-body, h1, h2, h3, p, ul, li {
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f8f8;
-    color: #333;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-h1, h2, h3 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-form {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-button {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-
-.video-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-
-.video-card {
-    text-align: center;
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.video-card img {
-    width: 300px;
-    height: 200px;
-}
-
-.video-card a {
-    text-decoration: none;
-    color: #333;
-}
-
-.video-card a:hover {
-    text-decoration: underline;
-}
-
-
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-    text-align: center;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #e5e5e5;
-} 
-
-
-
-</style>
-
+    <link rel="stylesheet" type="text/css" href="static/style.css">
 </head>
 
-
 <body>
-    <h2 style="text-align: center;">TOP 3 DE LA CATEGORIE : MUSIC</h2>
+    <h2 style="text-align: center;">TOP 3 DE LA CATEGORIE : MUSIQUE</h2>
 
     <!-- Ajoutez un formulaire avec une liste déroulante -->
     <form method="post" action="{{ url_for('music') }}">
@@ -135,9 +28,6 @@ tr:hover {
         </select>
         <button type="submit">Appliquer</button>
     </form>
-
-
-
 
     <!-- Itérer sur la liste pour afficher les informations pour chaque vidéo -->
     <div style="display: flex; justify-content: space-around;">
@@ -159,7 +49,6 @@ tr:hover {
     </div>
 
     <!-- Render Plotly figure here -->
-    <!-- <h2 style="text-align: center;">STATISTIQUES</h2> -->
     {{ plot_html|safe }}
 
     <h2 style="text-align: center;">TENDANCES DU MOIS</h2>
@@ -173,9 +62,7 @@ tr:hover {
         <button type="submit">Appliquer</button>
     </form>
 
-
  <!-- Afficher le tableau -->
-
  <div style="overflow-x: auto;">
     <table border="1" style="width:100%;">
         <thead>
@@ -184,7 +71,6 @@ tr:hover {
                 <th style="text-align: center;">Chaîne</th>
                 <th style="text-align: center;">Nombre de vues</th>
                 <th style="text-align: center;">Nombre de vidéos</th>
-                <!-- Ajoutez d'autres colonnes selon vos besoins -->
             </tr>
         </thead>
         <tbody>
@@ -198,13 +84,11 @@ tr:hover {
                     </td>
                     <td style="text-align: center;">{{ row['view_count'] }}</td>
                     <td style="text-align: center;">{{ row['nombre_videos'] }}</td>
-                    <!-- Ajoutez d'autres colonnes selon vos besoins -->
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
 
 {% endblock %}
 
