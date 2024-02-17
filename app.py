@@ -70,7 +70,7 @@ def moteur_recherche(query : str, df : pd.DataFrame) -> pd.DataFrame :
     doc_results = []
 
     for index in sorted_indices:
-        print(f"Similarity: {similarities[0][index]}, Document: {documents[index]}")
+        #print(f"Similarity: {similarities[0][index]}, Document: {documents[index]}")
         if similarities[0][index]>0:
             doc_results.append(documents[index])
 
