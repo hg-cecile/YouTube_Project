@@ -101,7 +101,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <!-- Ajouter le logo de YouTube à gauche du texte -->
         <a class="navbar-brand" href="{{ url_for('home')}}">
-            <img src="{{ url_for('static', filename='youtube-logo-png-46031.png') }}" alt="YouTube Logo" style="width: 30px; height: 30px; margin-right: 1px;">
+            <img src="{{ url_for('static', filename='logo_youstats.png') }}" alt="YouTube Logo" style="width: 30px; height: 30px; margin-right: 1px;">
             Home
         </a>
 
@@ -153,6 +153,11 @@
     <head>
         <!-- Add your meta tags, title, and style for the search bar here -->
     </head>
+
+    <img src="{{ url_for('static', filename='logo_youstats.png') }}" alt="Elevate your stats, choose YouStats!" style="display: block; margin: 20px auto; width: 50%; max-width: 400px;">
+    <p style="text-align: center; font-style: italic; font-size: 2em;">Elevate your stats, choose YouStats!</p>
+
+
     <body>
         <!-- <h1>Recherche de vidéos</h1> -->
         <form method="POST" action="{{ url_for('home') }}"  style="text-align: center;">
@@ -162,7 +167,7 @@
         </form>
         
     
-        <h2>Vidéos en tendance selon la recherche</h2>
+        <h5 style="font-size: 1.2em; text-align: center;">Vidéos en tendance selon la recherche :</h5>
         <div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
             {% for video_info in video_info_list %}
                 <div style="width: 30%; text-align: center; position: relative; margin-bottom: 20px;">
