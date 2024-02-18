@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>{% block title %}{% endblock %}</title>
+
+    <style>
+        body {
+            background-image: url('static/fond_vectoriel.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Arial', sans-serif; /* Appliquez la même police utilisée pour body, h1, h2, h3, etc. */
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #d40404;
+            color: #fff;
+            padding: 5px 15px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #eb0404;
+        }
+
+        .video-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .video-card {
+            text-align: center;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .video-card img {
+            width: 300px;
+            height: 200px;
+        }
+
+        .video-card a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .video-card a:hover {
+            text-decoration: underline;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #e5e5e5;
+        }
+    </style>
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Ajouter le logo de YouTube à gauche du texte -->
+        <a class="navbar-brand" href="{{ url_for('home')}}">
+            <img src="{{ url_for('static', filename='logo_youstats.png') }}" alt="YouTube Logo" style="width: 30px; height: 30px; margin-right: 1px;">
+            Home
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+         <div class="collapse navbar-collapse" id="navbarNav">
+             <ul class="navbar-nav">
+        
+
+	    <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('sports')}}">Sports</a>
+		</li>
+
+		<li class="nav-item">
+		    <a class="nav-link" href="{{ url_for('music') }}">Musique</a>
+		</li>
+
+        <li class="nav-item">
+		    <a class="nav-link" href="{{ url_for('entertainment') }}">Divertissement</a>
+		</li>
+
+        <li class="nav-item">
+		    <a class="nav-link" href="{{ url_for('comedy') }}">Comédie</a>
+		</li>
+
+        <li class="nav-item">
+		    <a class="nav-link" href="{{ url_for('gaming') }}">Gaming</a>
+		</li>
+
+        <li class="nav-item">
+		    <a class="nav-link" href="{{ url_for('education') }}">Education</a>
+		</li>
+
+        <li class="nav-item">
+		    <a class="nav-link" href="{{ url_for('people_blog') }}">People & Blogs</a>
+		</li>
+
+        <li class="nav-item">
+		    <a class="nav-link" href="{{ url_for('travel') }}">Voyages & Evènements</a>
+		</li>
+		
+	    </ul>
+        </div>
+    </nav>
+    
+    {% block content %}
+    <head>
+        <!-- Add your meta tags, title, and style for the search bar here -->
+    </head>
+
+    <img src="{{ url_for('static', filename='logo_youstats.png') }}" alt="Elevate your stats, choose YouStats!" style="display: block; margin: 20px auto; width: 50%; max-width: 400px;">
+    <p style="text-align: center; font-style: italic; font-size: 2em;">Elevate your stats, choose YouStats!</p>
+
+
+    <body>
+        <!-- <h1>Recherche de vidéos</h1> -->
+        <form method="POST" action="{{ url_for('home') }}"  style="text-align: center;">
+            <!-- <label for="search_query">Recherche :</label> -->
+            <input type="text" name="search_query" id="search_query" placeholder="Tapez un nom de vidéo" value="{{ search_query }}">
+            <button type="submit">Rechercher</button>
+        </form>
+        
+    
+        <h5 style="font-size: 1.2em; text-align: center;">Vidéos en tendance selon la recherche :</h5>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
+            {% for video_info in video_info_list %}
+                <div style="width: 30%; text-align: center; position: relative; margin-bottom: 20px;">
+                    <a href="https://www.youtube.com/watch?v={{ video_info['video_id'] }}" target="_blank">
+                        <div style="position: relative; display: inline-block; text-align: center;">
+                            <img src="{{ video_info['thumbnail_url'] }}" alt="Thumbnail" style="width: 250px; height: 150px;">
+                            <!-- Centrez l'image du logo YouTube horizontalement et verticalement -->
+                            <img src="{{ url_for('static', filename='youtube-logo-png-46031.png') }}" alt="YouTube Logo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px;">
+                        </div>
+                    </a>
+                    <h5>{{ video_info['title'] }}</h5>
+                    <p>Chaîne : {{ video_info['channel_title'] }}</p>
+                    <p>{{ video_info['view_count'] }} vues</p>
+                </div>
+            {% endfor %}
+        </div>
+        
+        
+        
+        
+    </body>
+    {% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

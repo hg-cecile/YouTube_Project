@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <!-- Add your meta tags, title, and style for the search bar here -->
+</head>
+<body>
+    <!-- <h1>Recherche de vidéos</h1> -->
+    <form method="POST" action="{{ url_for('search') }}"  style="text-align: center;">
+        <!-- <label for="search_query">Recherche :</label> -->
+        <input type="text" name="search_query" id="search_query" placeholder="Tapez un nom de vidéo" value="{{ search_query }}">
+        <button type="submit">Rechercher</button>
+    </form>
+    
+
+    <!-- <h1>Résultats de la recherche</h1> -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-around; border: 1px solid #ccc;">
+        <!-- Ajoutez une bordure pour visualiser le conteneur -->
+        {% for video_info in video_info_list %}
+            <div style="width: 25%; text-align: center; position: relative; margin-bottom: 20px; border: 1px solid #ddd;">
+                <!-- Ajoutez une bordure pour visualiser chaque élément vidéo -->
+                <a href="https://www.youtube.com/watch?v={{ video_info['video_id'] }}" target="_blank">
+                    <div style="position: relative; display: inline-block;">
+                        <img src="{{ video_info['thumbnail_url'] }}" alt="Thumbnail" style="width: 100%; height: auto;">
+                        <img src="{{ url_for('static', filename='youtube-logo-png-46031.png') }}" alt="YouTube Logo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px;">
+                    </div>
+                </a>
+                <h2>{{ video_info['title'] }}</h2>
+                <p>Chaîne : {{ video_info['channel_title'] }}</p>
+                <p>{{ video_info['view_count'] }} vues</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+    
+</body>
+{% endblock %}

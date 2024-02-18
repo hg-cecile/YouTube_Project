@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Plotly Example</title>
+    <!-- Include Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+
+<body>
+    <h2 style="text-align: center;">TOP 3 DE LA CATEGORIE : SPORTS</h2>
+
+    <!-- Ajoutez un formulaire avec une liste déroulante -->
+    <form method="post" action="{{ url_for('sports') }}">
+        <label for="year">Sélectionnez une année :</label>
+        <select name="year" id="year">
+            <option value="all" {% if request.form.year == 'all' %}selected{% endif %}>Toutes les années</option>
+            <option value="2020" {% if request.form.year == '2020' %}selected{% endif %}>2020</option>
+            <option value="2021" {% if request.form.year == '2021' %}selected{% endif %}>2021</option>
+            <option value="2022" {% if request.form.year == '2022' %}selected{% endif %}>2022</option>
+            <option value="2023" {% if request.form.year == '2023' %}selected{% endif %}>2023</option>
+            <option value="2024" {% if request.form.year == '2024' %}selected{% endif %}>2024</option>
+        </select>
+        <button type="submit">Appliquer</button>
+    </form>
+
+    <!-- Itérer sur la liste pour afficher les informations pour chaque vidéo -->
+    <div style="display: flex; justify-content: space-around;">
+        {% for video_info in video_info_list %}
+            <div style="text-align: center; position: relative;">
+                <a href="https://www.youtube.com/watch?v={{ video_info['video_id'] }}" target="_blank">
+                    <div style="position: relative; display: inline-block;">
+                        <!-- Image de la vidéo -->
+                        <img src="{{ video_info['thumbnail_url'] }}" alt="Thumbnail" style="width: 250px; height: 150px;">
+                        <!-- Logo de YouTube en position absolue -->
+                        <img src="{{ url_for('static', filename='youtube-logo-png-46031.png') }}" alt="YouTube Logo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px;">
+                    </div>
+                </a>
+                <h3>{{ video_info['title'] }}</h3>
+                <p>Chaîne : {{ video_info['channel_title'] }}</p>
+                <p>{{ video_info['view_count'] }} vues</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Render Plotly figure here -->
+    {{ plot_html|safe }}
+
+    <h2 style="text-align: center;">TENDANCES DU MOIS</h2>
+    <form method="post" action="{{ url_for('sports') }}">
+        <label for="date">Sélectionnez une date:</label>
+        <select name="date" id="date">
+            {% for date in liste_date %}
+                <option value="{{ date }}" {% if request.form.date == date %}selected{% endif %}>{{ date }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Appliquer</button>
+    </form>
+
+ <!-- Afficher le tableau -->
+ <div style="overflow-x: auto;">
+    <table border="1" style="width:100%;">
+        <thead>
+            <tr>
+                <th style="text-align: center;">Classement</th>
+                <th style="text-align: center;">Chaîne</th>
+                <th style="text-align: center;">Nombre de vues</th>
+                <th style="text-align: center;">Nombre de vidéos</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for index, row in tableau_data.iterrows() %}
+                <tr>
+                    <td style="text-align: center;">{{ row['Classement'] }}</td>
+                    <td style="text-align: center;">
+                        <a href="https://www.youtube.com/channel/{{ row['channelId'] }}" target="_blank">
+                            {{ row['channelTitle'] }}
+                        </a>
+                    </td>
+                    <td style="text-align: center;">{{ row['view_count'] }}</td>
+                    <td style="text-align: center;">{{ row['nombre_videos'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
