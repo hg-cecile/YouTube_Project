@@ -50,10 +50,12 @@ Une fois cela fait il ne vous reste plus qu'à apprécier votre experience !
 
 Dans le cadre du projet nous requêtons les données kaggle provenant de [YouTube Trending Video Dataset(updated daily)](https://www.kaggle.com/datasets/rsrishav/youtube-trending-video-dataset). Plus particulièrement nous nous servons uniquement du dataset concernant les données françaises. Cette donnée est automatiquement récupérée via un script bash, on s'assure ensuite d'avoir les permissions nécessaires sur la donnée récoltée à l'aide de l'intégrateur. On finit par processer la donnée avant de construire l'application.
 
-Dans le dossier data_collector on retrouve les scripts qui permettent de collecter la donnée depuis kaggle. Cette donnée est ensuite intégrée via le script se trouvant dans le dossier integrator, on s'assure que la donnée a bien été récoltée (existante) et qu'on puisse lire et écrire sur cette donnée. Ensuite on s'occupe de process la donnée, dans notre cas il s'agira uniquement de duppliquer cette donnée afin de pouvoir l'utiliser. 
+Dans le dossier data_collector/ on retrouve les scripts qui permettent de collecter la donnée depuis kaggle. Cette donnée est ensuite intégrée via le script se trouvant dans le dossier integrator/, on s'assure que la donnée a bien été récoltée (existante) et qu'on puisse lire et écrire sur cette donnée. Ensuite on s'occupe de process la donnée dans le dossier processor/, dans notre cas il s'agira uniquement de duppliquer cette donnée afin de pouvoir l'utiliser. 
 
-Les dossier static/ et templates/ comportent les fichiers nécessaires pour construire le rendu visuel de la web app.
+Les dossiers static/ et templates/ comportent les fichiers nécessaires pour construire le rendu visuel de la web app.
 
+- .env/
+    - kaggle.json (fichier credentials Kaggle à ajouter soi-même)
 - data_collector/
     - another_collector.py
     - fait_auto.sh
@@ -66,6 +68,7 @@ Les dossier static/ et templates/ comportent les fichiers nécessaires pour cons
 
 - static/
     - fond_vectoriel.jpg
+    - logo_youstats.png
     - style.css
     - youtube-logo-png-46031.png
 
